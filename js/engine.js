@@ -158,6 +158,7 @@ function epilogueHTML() {
   }
   if (f.passed_by) parts.push("Стеклодув закончился на углу, где ты не остановился. Этого нет ни в одном реестре, кроме твоего.");
   if (f.against_will) parts.push("Ты слышал «нет» брата — и пошёл дальше. Чем бы это ни кончилось, это сделано через его волю.");
+  if (f.kost_ally) parts.push("Ревизор Кость впервые за службу нашёл расхождение, которое нельзя списать. Он не простит этого никому — и меньше всех себе.");
 
   return '<div class="epilogue-block"><p>' + parts.join("</p><p>") + "</p></div>";
 }
@@ -178,6 +179,7 @@ function attempt(choice) {
 }
 
 function commit(choice) {
+  if (window.PerepisAudio) PerepisAudio.page();
   if (choice.effect) choice.effect(state);
   state.thinning += choice.thinning != null ? choice.thinning : THINNING_DEFAULT_STEP;
 
@@ -241,6 +243,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (confirm("Начать заново? Текущая перепись будет стёрта.")) restart();
   };
   $("memory-cancel").onclick = () => { pendingChoice = null; closeMemoryModal(); };
+
+  if (window.PerepisAudio) {
+    const btn = $("btn-sound");
+    const label = () => { btn.textContent = "Звук: " + (PerepisAudio.isEnabled() ? "вкл" : "выкл"); };
+    btn.onclick = () => { PerepisAudio.toggle(); label(); };
+    label();
+    PerepisAudio.armOnFirstGesture();
+  }
 
   state = load() || newState();
   render();
