@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ПЕРЕПИСЬ — мир, который существует, пока его учитывают</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <header id="topbar">
+      <h1 class="logo">ПЕРЕПИСЬ</h1>
+      <p class="tagline">мир, который существует, только пока его учитывают</p>
+    </header>
+
+    <main id="layout">
+      <aside id="sidebar">
+        <section class="panel">
+          <h2>Истончение мира</h2>
+          <div id="thinning-bar"><div id="thinning-fill"></div></div>
+          <p id="thinning-label"></p>
+        </section>
+
+        <section class="panel">
+          <h2>Твоя память</h2>
+          <p class="hint">Чернила делают из забвения. Потраченное — не вернётся.</p>
+          <ul id="memories"></ul>
+        </section>
+
+        <section class="panel">
+          <h2>При себе</h2>
+          <ul id="inventory"></ul>
+        </section>
+
+        <section class="panel buttons">
+          <button id="btn-restart" type="button">Начать заново</button>
+        </section>
+      </aside>
+
+      <section id="story">
+        <h2 id="scene-title"></h2>
+        <div id="scene-text"></div>
+        <div id="world-event"></div>
+        <div id="choices"></div>
+      </section>
+    </main>
+
+    <div id="memory-modal" class="hidden">
+      <div class="modal-box">
+        <h2>Цена — воспоминание</h2>
+        <p id="memory-modal-text">Выбери, что отдать. Ты забудешь это навсегда.</p>
+        <ul id="memory-options"></ul>
+        <button id="memory-cancel" type="button">Передумать</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/scenes.js"></script>
+  <script src="js/engine.js"></script>
+</body>
+</html>
