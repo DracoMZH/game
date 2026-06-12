@@ -251,6 +251,7 @@ const Demos = (() => {
       log(ok
         ? "✓ Подпись верна: сообщение подписал владелец приватного ключа и оно не менялось."
         : "✗ Подпись НЕ сходится: сообщение изменено после подписания!", ok ? "ok" : "bad");
+      if (window.GameBus) GameBus.emit("verified", {});
     });
     btn("Подменить сообщение: 1 → 100 BTC", () => {
       S.msg = "Перевести 100 BTC Бобу";
@@ -399,6 +400,7 @@ const Demos = (() => {
           block.material.emissiveIntensity = 1.0;
           status.setText(`НАЙДЕН! nonce=${S.nonce}`);
           log(`✓ Блок #${S.n} найден! nonce = <code>${S.nonce}</code>, попыток: ${S.tries.toLocaleString("ru")}, время: ${secs} c`, "gold");
+          if (window.GameBus) GameBus.emit("mined", {});
           log(`Хеш: <code>${h.slice(0, 28)}…</code> — любой узел проверит это одним вычислением.`, "ok");
           log("Добавь ещё один ноль сложности — и попыток станет в ~16 раз больше. Так сеть управляет темпом блоков.");
           startBtn.textContent = "→ Следующий блок";

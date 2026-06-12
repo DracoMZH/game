@@ -78,6 +78,17 @@ const World = (() => {
         add(new THREE.IcosahedronGeometry(1.0, 0), 0, 1.3);
         add(new THREE.TorusGeometry(1.25, 0.07, 8, 36), 0, 1.3, 0, Math.PI / 2);
         break;
+      case "chart":
+        add(new THREE.BoxGeometry(0.45, 0.7, 0.45), -1.0, 0.55);
+        add(new THREE.BoxGeometry(0.45, 1.5, 0.45), -0.3, 0.95);
+        add(new THREE.BoxGeometry(0.45, 1.0, 0.45), 0.4, 0.7);
+        add(new THREE.BoxGeometry(0.45, 2.1, 0.45), 1.1, 1.25);
+        break;
+      case "hook":
+        add(new THREE.TorusGeometry(0.55, 0.14, 10, 24, Math.PI * 1.4), 0, 0.8, 0, 0, 0, Math.PI);
+        add(new THREE.CylinderGeometry(0.13, 0.13, 1.6), 0.55, 1.6);
+        add(new THREE.ConeGeometry(0.22, 0.5, 10), -0.52, 0.62, 0, 0, 0, 2.6);
+        break;
       default:
         add(new THREE.BoxGeometry(1.2, 1.2, 1.2), 0, 1.2);
     }
