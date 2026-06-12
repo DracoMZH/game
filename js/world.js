@@ -32,6 +32,44 @@ const World = (() => {
     return sprite;
   }
 
+  // парящий замочек для закрытых районов
+  function makeLock(scale = 1.7) {
+    const c = document.createElement("canvas");
+    c.width = c.height = 128;
+    const g = c.getContext("2d");
+    g.beginPath();
+    g.arc(64, 64, 55, 0, Math.PI * 2);
+    g.fillStyle = "rgba(7, 11, 20, 0.78)";
+    g.fill();
+    g.strokeStyle = "rgba(170, 180, 210, 0.5)";
+    g.lineWidth = 4;
+    g.stroke();
+    // рисуем замок вручную — без шрифтовых эмодзи, одинаково на всех ОС
+    g.strokeStyle = "#aab4d2";
+    g.lineWidth = 9;
+    g.beginPath();                       // дужка
+    g.arc(64, 52, 17, Math.PI, 0);
+    g.stroke();
+    g.fillStyle = "#aab4d2";             // корпус
+    g.beginPath();
+    if (g.roundRect) g.roundRect(40, 52, 48, 38, 7);
+    else g.rect(40, 52, 48, 38);
+    g.fill();
+    g.fillStyle = "#1a2238";             // скважина
+    g.beginPath();
+    g.arc(64, 66, 6, 0, Math.PI * 2);
+    g.fill();
+    g.fillRect(61, 66, 6, 13);
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: new THREE.CanvasTexture(c),
+      transparent: true,
+      depthWrite: false,
+    }));
+    sprite.scale.set(scale, scale, 1);
+    sprite.visible = false;
+    return sprite;
+  }
+
   // стилизованная фигура района
   function makeShape(kind, mat) {
     const g = new THREE.Group();
@@ -131,8 +169,12 @@ const World = (() => {
     label.position.y = 4.3;
     group.add(label);
 
+    const lock = makeLock();
+    lock.position.y = 2.5;
+    group.add(lock);
+
     scene.add(group);
-    return { group, shape, mat, ring, idx, baseColor: mod.color, floatSeed: Math.random() * Math.PI * 2 };
+    return { group, shape, mat, ring, lock, label, idx, baseColor: mod.color, floatSeed: Math.random() * Math.PI * 2 };
   }
 
   function makeExamTower() {
@@ -158,8 +200,11 @@ const World = (() => {
     ring.position.y = 0.3;
     ring.visible = false;
     group.add(ring);
+    const lock = makeLock(2.1);
+    lock.position.y = 6.1;
+    group.add(lock);
     scene.add(group);
-    return { group, shape: top, mat, ring, idx: "exam", baseColor: 0xf5c542, floatSeed: 0 };
+    return { group, shape: top, mat, ring, lock, label, idx: "exam", baseColor: 0xf5c542, floatSeed: 0 };
   }
 
   function makeEnvironment() {
@@ -462,9 +507,11 @@ const World = (() => {
     for (const d of districts) {
       d.shape.rotation.y = time * 0.4 + d.floatSeed;
       d.shape.position.y = 0.7 + Math.sin(time * 1.2 + d.floatSeed) * 0.12;
+      if (d.lock.visible) d.lock.position.y = 2.5 + Math.sin(time * 1.6 + d.floatSeed) * 0.09;
       const target = (hovered === d) ? 0.9 : (d.locked ? 0.06 : 0.35);
       d.mat.emissiveIntensity += (target - d.mat.emissiveIntensity) * 0.12;
     }
+    if (examTower.lock.visible) examTower.lock.position.y = 6.1 + Math.sin(time * 1.6) * 0.1;
     examTower.shape.rotation.y = time * 0.6;
     const et = (hovered === examTower) ? 0.85 : (examTower.locked ? 0.06 : 0.3);
     examTower.mat.emissiveIntensity += (et - examTower.mat.emissiveIntensity) * 0.12;
@@ -503,11 +550,15 @@ const World = (() => {
         const d = districts[i];
         d.locked = st === "locked";
         d.ring.visible = st === "done";
+        d.lock.visible = d.locked;
+        d.label.material.opacity = d.locked ? 0.45 : 1;
         d.mat.color.set(d.locked ? 0x3a4258 : d.baseColor);
         d.mat.emissive.set(d.locked ? 0x222838 : d.baseColor);
       });
       examTower.locked = examState === "locked";
       examTower.ring.visible = examState === "done";
+      examTower.lock.visible = examTower.locked;
+      examTower.label.material.opacity = examTower.locked ? 0.45 : 1;
       examTower.mat.color.set(examTower.locked ? 0x3a4258 : 0xf5c542);
       examTower.mat.emissive.set(examTower.locked ? 0x222838 : 0xf5c542);
     },
