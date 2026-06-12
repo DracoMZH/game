@@ -25,6 +25,13 @@ html, body {
 
 #scene { position: fixed; inset: 0; display: block; }
 
+#vignette {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(ellipse at 50% 42%, transparent 52%, rgba(3, 5, 11, 0.5) 100%);
+}
+
 /* ---------- HUD ---------- */
 
 #hud {
