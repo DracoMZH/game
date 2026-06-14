@@ -16,7 +16,22 @@
       needs: "blockchain", needsLabel: "модуль 1" },
     { id: "phish", short: "🕵 Кибер-полигон", color: 0xff8787, shape: "hook",
       needs: "wallets", needsLabel: "модуль 3" },
+    { id: "scenarios", short: "🧭 Развилки", color: 0xffd43b, shape: "fork",
+      needs: "blockchain", needsLabel: "модуль 1" },
+    { id: "seed", short: "🔑 Сид-фраза", color: 0x9775fa, shape: "seed",
+      needs: "wallets", needsLabel: "модуль 3" },
+    { id: "race", short: "🏁 Гонка майнинга", color: 0xff922b, shape: "flag",
+      needs: "mining", needsLabel: "модуль 4" },
   ];
+
+  // конфигурация мини-игр: модуль, событие достижений, XP, условие зачёта
+  const SIMS = {
+    trade:     { title: "Торговый терминал",            run: () => Trade,     ev: "trade_done",     xp: XP_TRADE, done: () => true },
+    phish:     { title: "Кибер-полигон: распознай скам", run: () => Phish,     ev: "phish_done",     xp: XP_PHISH, done: (r) => r.passed },
+    scenarios: { title: "Развилки: проверка решений",    run: () => Scenarios, ev: "scenarios_done", xp: 30,       done: () => true },
+    seed:      { title: "Сид-фраза и проверка бэкапа",   run: () => Seed,      ev: "seed_done",      xp: 25,       done: (r) => r.ok },
+    race:      { title: "Гонка майнинга против ботов",   run: () => Race,      ev: "race_done",      xp: 25,       done: () => true },
+  };
 
   const $ = (id) => document.getElementById(id);
   let progress = loadProgress();
@@ -27,6 +42,11 @@
     try { p = JSON.parse(localStorage.getItem(SAVE_KEY)); } catch (e) { /* нет сохранения */ }
     if (!p || !p.done) p = { done: {}, xp: 0, examPassed: false, seenIntro: false };
     if (!p.ach) p.ach = {};
+    if (!p.simDone) {
+      p.simDone = {};
+      if (p.simTrade) p.simDone.trade = true;   // миграция старого формата
+      if (p.simPhish) p.simDone.phish = true;
+    }
     return p;
   }
   function save() {
@@ -52,7 +72,7 @@
   const isUnlocked = (i) => i === 0 || !!progress.done[MODULES[i - 1].id];
   const allDone = () => MODULES.every((m) => progress.done[m.id]);
   const extraUnlocked = (e) => !!progress.done[e.needs];
-  const extraDone = (e) => (e.id === "trade" ? !!progress.simTrade : !!progress.simPhish);
+  const extraDone = (e) => !!progress.simDone[e.id];
 
   function states() {
     const mods = MODULES.map((m, i) => progress.done[m.id] ? "done" : isUnlocked(i) ? "open" : "locked");
@@ -120,7 +140,8 @@
   function closePanel() {
     $("panel").classList.add("hidden");
     Demos.stop();
-    Trade.close();
+    if (activeSim && activeSim.close) activeSim.close();
+    activeSim = null;
     current = null;
   }
 
@@ -173,25 +194,26 @@
 
   // ---------- симуляторы ----------
 
+  let activeSim = null; // ссылка на модуль текущей мини-игры (для close)
+
   function openSim(id) {
     const e = EXTRAS.find((x) => x.id === id);
-    if (!extraUnlocked(e)) return;
+    if (!e || !extraUnlocked(e)) return;
+    const cfg = SIMS[id];
+    if (!cfg) return;
     current = id;
-    if (id === "trade") {
-      panelMode({ title: "Торговый терминал", sim: true });
-      Trade.open($("sim"), (res) => {
-        if (!progress.simTrade) { progress.simTrade = true; progress.xp += XP_TRADE; }
-        emit("trade_done", res);
-        save(); refreshHUD();
-      });
-    } else {
-      panelMode({ title: "Кибер-полигон: распознай скам", sim: true });
-      Phish.open($("sim"), (res) => {
-        if (res.passed && !progress.simPhish) { progress.simPhish = true; progress.xp += XP_PHISH; }
-        emit("phish_done", res);
-        save(); refreshHUD();
-      });
-    }
+    panelMode({ title: cfg.title, sim: true });
+    const mod = cfg.run();
+    activeSim = mod;
+    mod.open($("sim"), (res) => {
+      if (cfg.done(res) && !progress.simDone[id]) {
+        progress.simDone[id] = true;
+        progress.xp += cfg.xp;
+      }
+      emit(cfg.ev, res);
+      save();
+      refreshHUD();
+    });
   }
 
   // ---------- квиз ----------
@@ -313,7 +335,7 @@
     World.init($("scene"), MODULES.concat(EXTRAS), (idx) => {
       Sound.click();
       if (idx === "exam") openExam();
-      else if (idx <= 7) openModule(idx);
+      else if (idx < MODULES.length) openModule(idx);
       else openSim(EXTRAS[idx - MODULES.length].id);
     });
 

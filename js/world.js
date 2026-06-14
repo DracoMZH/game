@@ -129,6 +129,23 @@ const World = (() => {
         add(new THREE.CylinderGeometry(0.13, 0.13, 1.6), 0.55, 1.6);
         add(new THREE.ConeGeometry(0.22, 0.5, 10), -0.52, 0.62, 0, 0, 0, 2.6);
         break;
+      case "fork":
+        add(new THREE.CylinderGeometry(0.16, 0.16, 1.1), 0, 0.7);
+        add(new THREE.CylinderGeometry(0.13, 0.13, 1.2), -0.45, 1.55, 0, 0, 0, 0.5);
+        add(new THREE.CylinderGeometry(0.13, 0.13, 1.2), 0.45, 1.55, 0, 0, 0, -0.5);
+        add(new THREE.SphereGeometry(0.2, 12, 10), -0.85, 2.05);
+        add(new THREE.SphereGeometry(0.2, 12, 10), 0.85, 2.05);
+        break;
+      case "seed":
+        add(new THREE.IcosahedronGeometry(0.7, 0), 0, 0.95);
+        add(new THREE.ConeGeometry(0.32, 0.9, 12), 0, 1.85);
+        add(new THREE.CylinderGeometry(0.07, 0.07, 0.6), 0, 0.4);
+        break;
+      case "flag":
+        add(new THREE.CylinderGeometry(0.08, 0.08, 2.4), -0.6, 1.2);
+        add(new THREE.BoxGeometry(1.1, 0.7, 0.08), 0.0, 2.0);
+        add(new THREE.BoxGeometry(1.1, 0.7, 0.06), 0.02, 1.25);
+        break;
       default:
         add(new THREE.BoxGeometry(1.2, 1.2, 1.2), 0, 1.2);
     }

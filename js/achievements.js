@@ -12,6 +12,10 @@ const ACHIEVEMENTS = [
   { id: "trader_profit", icon: "💰", name: "В плюсе",           desc: "Заверши симулятор с прибылью",                 ev: "trade_done",   cond: (d) => d.profit > 0 },
   { id: "diamond_hands", icon: "💎", name: "Алмазные руки",     desc: "Переживи обвал на 40%+, не продав всё",        ev: "trade_done",   cond: (d) => d.survivedCrash },
   { id: "scam_hunter",   icon: "🕵", name: "Охотник на скам",   desc: "Распознай все 10 сценариев фишинга",           ev: "phish_done",   cond: (d) => d.correct === d.total },
+  { id: "cool_head",     icon: "🧭", name: "Холодная голова",   desc: "Пройди все развилки до конца",                 ev: "scenarios_done", cond: () => true },
+  { id: "wise",          icon: "🦉", name: "Мудрое суждение",   desc: "Набери почти максимум очков на развилках",     ev: "scenarios_done", cond: (d) => d.score >= d.max - 2 },
+  { id: "backup",        icon: "🔑", name: "Бэкап восстановлен", desc: "Собери сид-фразу по памяти без ошибок",        ev: "seed_done",    cond: (d) => d.ok },
+  { id: "miner_king",    icon: "🏁", name: "Обогнал ботов",     desc: "Выиграй гонку майнинга",                       ev: "race_done",    cond: (d) => d.won },
 ];
 
 const Achievements = (() => {
