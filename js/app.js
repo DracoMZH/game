@@ -178,7 +178,7 @@
     if (!extraUnlocked(e)) return;
     current = id;
     if (id === "trade") {
-      panelMode({ title: "Торговый симулятор: два года рынка", sim: true });
+      panelMode({ title: "Торговый терминал", sim: true });
       Trade.open($("sim"), (res) => {
         if (!progress.simTrade) { progress.simTrade = true; progress.xp += XP_TRADE; }
         emit("trade_done", res);

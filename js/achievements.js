@@ -8,7 +8,7 @@ const ACHIEVEMENTS = [
   { id: "signer",        icon: "🔏", name: "Криптограф",        desc: "Проверь настоящую цифровую подпись",           ev: "verified",     cond: () => true },
   { id: "all_modules",   icon: "🏙", name: "Весь город",        desc: "Зачти все 8 модулей",                          ev: "module_done",  cond: (d, p) => MODULES.every((m) => p.done[m.id]) },
   { id: "satoshi",       icon: "👑", name: "Сатоши",            desc: "Сдай финальный экзамен",                       ev: "exam_passed",  cond: () => true },
-  { id: "trader_run",    icon: "📈", name: "Два года на рынке", desc: "Пройди торговый симулятор до конца",           ev: "trade_done",   cond: () => true },
+  { id: "trader_run",    icon: "📈", name: "Трейдер",           desc: "Доведи торговую сессию до закрытия",           ev: "trade_done",   cond: () => true },
   { id: "trader_profit", icon: "💰", name: "В плюсе",           desc: "Заверши симулятор с прибылью",                 ev: "trade_done",   cond: (d) => d.profit > 0 },
   { id: "diamond_hands", icon: "💎", name: "Алмазные руки",     desc: "Переживи обвал на 40%+, не продав всё",        ev: "trade_done",   cond: (d) => d.survivedCrash },
   { id: "scam_hunter",   icon: "🕵", name: "Охотник на скам",   desc: "Распознай все 10 сценариев фишинга",           ev: "phish_done",   cond: (d) => d.correct === d.total },

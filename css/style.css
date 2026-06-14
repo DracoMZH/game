@@ -310,49 +310,141 @@ button.primary:hover, .panel-foot button:hover, .intro-box button:hover,
 .ach-row > div { flex: 1; }
 .ach-mark { color: var(--gold); font-size: 1.1rem; }
 
-/* ---------- Торговый симулятор ---------- */
+/* ---------- Торговый терминал ---------- */
 
 .muted { color: var(--muted); font-size: 0.84rem; }
 .pos { color: var(--accent); }
 .neg { color: var(--red); }
 
-.trade-stats {
-  display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem;
-  font-size: 0.85rem; color: var(--muted);
-  margin: 0.8rem 0;
-}
-.trade-stats b { color: var(--text); }
-.trade-chart {
-  width: 100%; height: 180px;
-  display: block;
+.ts-intro { margin: 0 0 0.8rem; }
+
+.ts-assets { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
+.ts-tab {
+  flex: 1 1 110px;
+  display: flex; flex-direction: column; gap: 0.1rem;
+  background: var(--panel-2);
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #060910;
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
 }
-.trade-controls {
-  display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem;
-  align-items: center;
-  margin: 0.8rem 0;
-  font-size: 0.82rem; color: var(--muted);
+.ts-tab:hover { border-color: var(--accent-2); }
+.ts-tab.active { border-color: var(--accent); background: #16223a; }
+.ta-sym { font-weight: 700; font-size: 0.82rem; }
+.ta-price { font-size: 0.86rem; color: var(--text); font-family: "Consolas", monospace; }
+.ta-ch { font-size: 0.74rem; }
+
+.ts-grid { display: flex; gap: 1rem; align-items: flex-start; }
+.ts-left { flex: 1 1 60%; min-width: 0; }
+.ts-right { flex: 0 0 250px; display: flex; flex-direction: column; gap: 0.8rem; }
+
+.ts-clockbar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;
 }
-.trade-controls .grp { display: flex; gap: 0.35rem; align-items: center; }
-.trade-controls button {
+.ts-clock { font-size: 0.9rem; color: var(--muted); }
+.ts-clock b { color: var(--text); font-size: 1.05rem; }
+.ts-clockbtns { display: flex; gap: 0.4rem; }
+.ts-clockbtns button {
   font-family: inherit; font-size: 0.8rem;
-  padding: 0.35rem 0.7rem;
-  border-radius: 6px;
-  border: 1px solid var(--line);
-  background: var(--panel-2);
-  color: var(--text);
+  padding: 0.4rem 0.7rem; border-radius: 6px;
+  border: 1px solid var(--line); background: var(--panel-2); color: var(--text);
   cursor: pointer;
 }
-.trade-controls button:hover { border-color: var(--accent); }
-.trade-controls button.active { border-color: var(--accent); color: var(--accent); }
-.trade-controls .finish { border-color: var(--red); color: var(--red); margin-left: auto; }
-.trade-news { font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.25rem; min-height: 1rem; }
-.trade-news .bad { color: var(--red); }
-.trade-news .ok { color: var(--accent); }
-.trade-result h3 { color: var(--gold); }
-.trade-result p { font-size: 0.9rem; line-height: 1.6; }
+.ts-next { border-color: var(--accent) !important; color: var(--accent) !important; font-weight: 600; }
+.ts-next:hover { background: rgba(56,217,169,0.15) !important; }
+.ts-auto.active { border-color: var(--accent-2) !important; color: var(--accent-2) !important; }
+.ts-end { border-color: var(--line); color: var(--muted) !important; }
+
+.ts-chart {
+  width: 100%; height: 320px; display: block;
+  border: 1px solid var(--line); border-radius: 8px; background: #060910;
+}
+
+.ts-feedwrap { display: flex; gap: 0.8rem; margin-top: 0.7rem; }
+.ts-news, .ts-log {
+  flex: 1; min-height: 70px; max-height: 130px; overflow-y: auto;
+  font-size: 0.76rem; line-height: 1.5;
+  background: #060910; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+}
+.ts-news .bad { color: var(--red); }
+.ts-news .ok { color: var(--accent); }
+.ts-log { color: var(--muted); }
+
+/* ордер-тикет */
+.ts-ticket {
+  background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 10px; padding: 0.8rem;
+}
+.tk-side { display: flex; gap: 0.4rem; margin-bottom: 0.6rem; }
+.tk-side button {
+  flex: 1; font-family: inherit; font-size: 0.82rem;
+  padding: 0.4rem; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--panel); color: var(--muted);
+}
+.tk-buy.active { border-color: var(--accent); color: var(--accent); background: rgba(56,217,169,0.12); }
+.tk-sell.active { border-color: var(--red); color: var(--red); background: rgba(255,107,107,0.12); }
+.tk-head { font-size: 0.86rem; margin-bottom: 0.25rem; }
+.tk-pos { font-size: 0.76rem; color: var(--muted); margin-bottom: 0.6rem; }
+.tk-amtl { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.5rem; }
+.tk-amt {
+  width: 100%; margin-top: 0.25rem; box-sizing: border-box;
+  background: var(--panel); color: var(--text);
+  border: 1px solid var(--line); border-radius: 6px; padding: 0.45rem 0.6rem;
+  font-family: "Consolas", monospace; font-size: 0.95rem;
+}
+.tk-quick { display: flex; gap: 0.3rem; margin-bottom: 0.5rem; }
+.tk-quick button {
+  flex: 1; font-family: inherit; font-size: 0.74rem;
+  padding: 0.3rem; border-radius: 5px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--panel); color: var(--text);
+}
+.tk-quick button:hover { border-color: var(--accent-2); }
+.tk-preview { font-size: 0.78rem; color: var(--muted); min-height: 1.1rem; margin-bottom: 0.5rem; }
+.tk-exec {
+  width: 100%; font-family: inherit; font-size: 0.9rem; font-weight: 600;
+  padding: 0.55rem; border-radius: 8px; cursor: pointer;
+}
+.tk-exec.buy { border: 1px solid var(--accent); background: rgba(56,217,169,0.15); color: var(--accent); }
+.tk-exec.sell { border: 1px solid var(--red); background: rgba(255,107,107,0.15); color: var(--red); }
+.tk-msg { font-size: 0.76rem; color: var(--muted); min-height: 1rem; margin-top: 0.4rem; }
+.tk-msg.bad { color: var(--red); }
+
+/* портфель */
+.ts-port {
+  background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 10px; padding: 0.7rem 0.8rem;
+}
+.pf-row { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 0.15rem 0; }
+.pf-row span { color: var(--muted); }
+.pf-row.sub { border-top: 1px solid var(--line); margin-top: 0.3rem; padding-top: 0.4rem; }
+
+/* таблица позиций */
+.hold-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.hold-table th { color: var(--muted); font-weight: 500; text-align: right; padding: 0.3rem 0.35rem; border-bottom: 1px solid var(--line); }
+.hold-table th:first-child, .hold-table td:first-child { text-align: left; }
+.hold-table td { text-align: right; padding: 0.3rem 0.35rem; font-family: "Consolas", monospace; }
+.ts-holdings { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 0.6rem 0.7rem; }
+
+.ts-result {
+  margin-top: 1rem; border-top: 1px solid var(--line); padding-top: 1rem;
+}
+.ts-result h3 { color: var(--gold); margin: 0 0 0.5rem; }
+.ts-result p { font-size: 0.9rem; line-height: 1.6; }
+.ts-restart {
+  margin-top: 0.5rem; font-family: inherit; font-size: 0.9rem;
+  padding: 0.55rem 1.2rem; border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--accent); background: rgba(56,217,169,0.12); color: var(--accent);
+}
+
+@media (max-width: 720px) {
+  .ts-grid { flex-direction: column; }
+  .ts-right { flex-basis: auto; width: 100%; }
+  .ts-feedwrap { flex-direction: column; }
+}
 
 /* ---------- Кибер-полигон ---------- */
 
